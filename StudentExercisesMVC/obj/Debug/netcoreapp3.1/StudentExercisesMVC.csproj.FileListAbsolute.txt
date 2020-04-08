@@ -131,3 +131,5 @@ C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netco
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\Razor\Views\Instructors\Index.cshtml.g.cs
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\Razor\Views\Students\Details.cshtml.g.cs
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\Razor\Views\Students\Index.cshtml.g.cs
+C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\Razor\Views\Students\Create.cshtml.g.cs
+C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\Razor\Views\Instructors\Create.cshtml.g.cs

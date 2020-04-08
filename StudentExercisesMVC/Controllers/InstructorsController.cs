@@ -101,15 +101,35 @@ namespace InstructorExercisesMVC.Controllers
         // POST: Instructors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Instructor instructor)
         {
             try
             {
-                // TODO: Add insert logic here
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"INSERT INTO Instructor (FirstName, LastName, SlackHandle, CohortId, Specialty)
+                                            OUTPUT INSERTED.Id
+                                            VALUES (@firstName, @lastName, @slackHandle, @cohortId, @specialty)";
 
-                return RedirectToAction(nameof(Index));
+                        cmd.Parameters.Add(new SqlParameter("@firstName", instructor.FirstName));
+                        cmd.Parameters.Add(new SqlParameter("@lastName", instructor.LastName));
+                        cmd.Parameters.Add(new SqlParameter("@slackHandle", instructor.SlackHandle));
+                        cmd.Parameters.Add(new SqlParameter("@cohortId", instructor.CohortId));
+                        cmd.Parameters.Add(new SqlParameter("@specialty", instructor.Specialty));
+
+                        var id = (int)cmd.ExecuteScalar();
+                        instructor.Id = id;
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
