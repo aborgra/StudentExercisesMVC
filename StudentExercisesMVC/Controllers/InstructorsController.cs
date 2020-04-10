@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using StudentExercisesMVC.Models;
+using StudentExercisesMVC.Models.ViewModels;
 
 namespace InstructorExercisesMVC.Controllers
 {
@@ -34,7 +36,9 @@ namespace InstructorExercisesMVC.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, FirstName, LastName, CohortId, SlackHandle, Specialty FROM Instructor";
+                    cmd.CommandText = @"SELECT i.Id, i.FirstName, i.LastName, i.CohortId, i.SlackHandle, i.Specialty, c.Name 
+                                        FROM Instructor i
+                                        LEFT JOIN Cohort c on i.CohortId = c.Id";
 
                     var reader = cmd.ExecuteReader();
                     var instructors = new List<Instructor>();
@@ -48,7 +52,11 @@ namespace InstructorExercisesMVC.Controllers
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             SlackHandle = reader.GetString(reader.GetOrdinal("SlackHandle")),
                             CohortId = reader.GetInt32(reader.GetOrdinal("CohortId")),
-                            Specialty = reader.GetString(reader.GetOrdinal("Specialty"))
+                            Specialty = reader.GetString(reader.GetOrdinal("Specialty")),
+                            Cohort = new Cohort()
+                            {
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            }
                         };
                         instructors.Add(instructor);
                     }
@@ -68,7 +76,11 @@ namespace InstructorExercisesMVC.Controllers
         // GET: Instructors/Create
         public ActionResult Create()
         {
-            return View();
+            var viewModel = new InstructorViewModel()
+            {
+                CohortOptions = GetCohortOptions()
+            };
+            return View(viewModel);
         }
 
         // POST: Instructors/Create
@@ -112,13 +124,23 @@ namespace InstructorExercisesMVC.Controllers
         public ActionResult Edit(int id)
         {
             var instructor = GetInstructorById(id);
-            return View(instructor);
+            var viewModel = new InstructorViewModel()
+            {
+                InstructorId = instructor.Id,
+                FirstName = instructor.FirstName,
+                LastName = instructor.LastName,
+                SlackHandle = instructor.SlackHandle,
+                CohortId = instructor.CohortId,
+                Specialty = instructor.Specialty,
+                CohortOptions = GetCohortOptions()
+            };
+            return View(viewModel);
         }
 
         // POST: Instructors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Instructor instructor)
+        public ActionResult Edit(int id, InstructorViewModel instructor)
         {
             try
             {
@@ -200,7 +222,10 @@ namespace InstructorExercisesMVC.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, FirstName, LastName, CohortId, SlackHandle, Specialty FROM Instructor WHERE Id = @id";
+                    cmd.CommandText = @"SELECT i.Id, i.FirstName, i.LastName, i.CohortId, i.SlackHandle, i.Specialty, c.Name 
+                                        FROM Instructor i
+                                        LEFT JOIN Cohort c on i.CohortId = c.Id
+                                        WHERE i.Id = @id";
 
                     cmd.Parameters.Add(new SqlParameter("@id", id));
 
@@ -216,12 +241,44 @@ namespace InstructorExercisesMVC.Controllers
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             SlackHandle = reader.GetString(reader.GetOrdinal("SlackHandle")),
                             Specialty = reader.GetString(reader.GetOrdinal("Specialty")),
-                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId")),
+                            Cohort = new Cohort()
+                            {
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            }
                         };
 
                     }
                     reader.Close();
                     return instructor;
+
+                }
+            }
+        }
+
+        private List<SelectListItem> GetCohortOptions()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT Id, Name FROM Cohort";
+
+                    var reader = cmd.ExecuteReader();
+                    var options = new List<SelectListItem>();
+
+                    while (reader.Read())
+                    {
+                        var option = new SelectListItem()
+                        {
+                            Text = reader.GetString(reader.GetOrdinal("Name")),
+                            Value = reader.GetInt32(reader.GetOrdinal("Id")).ToString()
+                        };
+                        options.Add(option);
+                    }
+                    reader.Close();
+                    return options;
 
                 }
             }

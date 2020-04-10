@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace StudentExercisesMVC.Models.ViewModels
 {
-    public class StudentViewModel
+    public class InstructorViewModel
     {
-        [Display (Name = "Student Id")]
-        public int StudentId { get; set; }
+        [Display(Name = "Instructor Id")]
+
+        public int InstructorId { get; set; }
         [Display(Name = "First Name")]
 
         public string FirstName { get; set; }
@@ -20,9 +21,11 @@ namespace StudentExercisesMVC.Models.ViewModels
         [Display(Name = "Slack Handle")]
 
         public string SlackHandle { get; set; }
-        [Display(Name = "Cohort")]
+            public int CohortId { get; set; }
+        [Display(Name = "Specialty")]
 
-        public int CohortId { get; set; }
-        public List<SelectListItem> CohortOptions { get; set; }
+        public string Specialty { get; set; }
+            public List<SelectListItem> CohortOptions { get; set; }
+        
     }
 }

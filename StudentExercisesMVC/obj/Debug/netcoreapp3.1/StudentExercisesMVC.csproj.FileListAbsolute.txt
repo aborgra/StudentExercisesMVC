@@ -2,7 +2,6 @@ C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\bin\Debug\netco
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\bin\Debug\netcoreapp3.1\StudentExercisesMVC.exe
-C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\StudentExercisesMVC.csprojAssemblyReference.cache
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\StudentExercisesMVC.RazorAssemblyInfo.cache
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\StudentExercisesMVC.RazorAssemblyInfo.cs
 C:\Users\audbe\workspace\StudentExercisesMVC\StudentExercisesMVC\obj\Debug\netcoreapp3.1\StudentExercisesMVC.AssemblyInfoInputs.cache

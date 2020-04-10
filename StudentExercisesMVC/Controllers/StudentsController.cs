@@ -37,7 +37,9 @@ namespace StudentExercisesMVC.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, FirstName, LastName, CohortId, SlackHandle FROM Student";
+                    cmd.CommandText = @"SELECT s.Id, s.FirstName, s.LastName, s.CohortId, s.SlackHandle, c.Name
+                                        FROM Student s
+                                        LEFT JOIN Cohort c on s.CohortId = c.Id";
 
                     var reader = cmd.ExecuteReader();
                     var students = new List<Student>();
@@ -50,7 +52,12 @@ namespace StudentExercisesMVC.Controllers
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             SlackHandle = reader.GetString(reader.GetOrdinal("SlackHandle")),
-                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId")),
+                            Cohort = new Cohort()
+                            {
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
+
+                            }
                         };
                         students.Add(student);
                     }
@@ -83,7 +90,7 @@ namespace StudentExercisesMVC.Controllers
         // POST: Students/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(StudentViewModel student)
+        public ActionResult Create(Student student)
         {
             try
             {
@@ -215,7 +222,10 @@ namespace StudentExercisesMVC.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, FirstName, LastName, CohortId, SlackHandle FROM Student WHERE Id = @id";
+                    cmd.CommandText = @"SELECT s.Id, s.FirstName, s.LastName, s.CohortId, s.SlackHandle, c.Name
+                                        FROM Student s
+                                        LEFT JOIN Cohort c on s.CohortId = c.Id
+                                        WHERE i.Id = @id";
 
                     cmd.Parameters.Add(new SqlParameter("@id", id));
 
@@ -230,7 +240,11 @@ namespace StudentExercisesMVC.Controllers
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             SlackHandle = reader.GetString(reader.GetOrdinal("SlackHandle")),
-                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId")),
+                            Cohort = new Cohort ()
+                            {
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            }
                         };
 
                     }
